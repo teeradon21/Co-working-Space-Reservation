@@ -10,9 +10,9 @@ dotenv.config({path:'./config/config.env'});
 connectDB();
 
 //Route files
-const hospitals = require('./routes/hospitals');
+const spaces = require('./routes/spaces');
 const auth = require('./routes/auth');
-const appointments = require('./routes/appointments');
+const reservations = require('./routes/reservations');
 
 const app=express();
 
@@ -22,9 +22,9 @@ app.use(express.json());
 //Cookie parser
 app.use(cookieParser());
 
-app.use('/api/v1/hospitals',hospitals);
+app.use('/api/v1/spaces',spaces);
 app.use('/api/v1/auth',auth);
-app.use('/api/v1/appointments',appointments);
+app.use('/api/v1/reservations',reservations);
 
 // app.get('/',(req,res) => {
 //     res.status(200).json({success:"true", data:{id:1}});

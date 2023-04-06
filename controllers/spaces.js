@@ -1,10 +1,10 @@
-const Hospital = require('../models/Hospital');
-const { param } = require('../routes/hospitals');
+const Space = require('../models/Space');
+const { param } = require('../routes/spaces');
 
-//@desc     Get all hospitals
-//@route    GET /api/v1/hospitals 
+//@desc     Get all spaces
+//@route    GET /api/v1/spaces 
 //@access   Public
-exports.getHospitals= async (req,res,next)=>{
+exports.getSpaces= async (req,res,next)=>{
     try{
         let query;
         //Copy req.query
@@ -24,7 +24,7 @@ exports.getHospitals= async (req,res,next)=>{
         queryStr = queryStr.replace(/\b(gt|get|lt|lte|in)\b/, match=>`$${match}`);
 
         //finding resource
-        query = Hospital.find(JSON.parse(queryStr)).populate('appointments');
+        query = Space.find(JSON.parse(queryStr)).populate('reservations');
 
         //Select Fields
         if(req.query.select){
@@ -44,12 +44,12 @@ exports.getHospitals= async (req,res,next)=>{
         const limit = parseInt(req.query.limit,10) || 25;
         const startIndex = (page-1)*limit;
         const endIndex = page*limit;
-        const total = await Hospital.countDocuments();
+        const total = await Space.countDocuments();
 
         query=query.skip(startIndex).limit(limit);
 
         //Executing query
-        const hospitals = await query;
+        const spaces = await query;
 
         //Pagination result
         const pagination = {};
@@ -68,69 +68,69 @@ exports.getHospitals= async (req,res,next)=>{
             }
         }
         
-        res.status(200).json({success:true, count:hospitals.length, pagination, data:hospitals});
+        res.status(200).json({success:true, count:spaces.length, pagination, data:spaces});
     } catch(err){
         res.status(400).json({success:false});
     }
     
 };
 
-//@desc     Get single hospital
-//@route    GET /api/v1/hospitals/:id
+//@desc     Get single space
+//@route    GET /api/v1/spaces/:id
 //@access   Public
-exports.getHospital= async (req,res,next)=>{
+exports.getSpace= async (req,res,next)=>{
     try{
-        const hospital = await Hospital.findById(req.params.id);
-        if(!hospital){
+        const space = await Space.findById(req.params.id);
+        if(!space){
             return res.status(400).json({success:false});
         }
-        res.status(200).json({success:true, data:hospital});
+        res.status(200).json({success:true, data:space});
     } catch(err){
         res.status(400).json({success:false});
     }
     
 }
 
-//@desc     Create new hospital
-//@route    POST /api/v1/hospitals 
+//@desc     Create new space
+//@route    POST /api/v1/spaces 
 //@access   Private
-exports.createHospital= async (req,res,next)=>{
+exports.createSpace= async (req,res,next)=>{
     //console.log(req.body)
-    const hospital = await Hospital.create(req.body); 
-    res.status(201).json({success: true, data:hospital});
+    const space = await Space.create(req.body); 
+    res.status(201).json({success: true, data:space});
 };
 
-//@desc     Update hospital
-//@route    PUT /api/v1/hospitals/:id 
+//@desc     Update space
+//@route    PUT /api/v1/spaces/:id 
 //@access   Private
-exports.updateHospital= async (req,res,next)=>{
+exports.updateSpace= async (req,res,next)=>{
     try{
-        const hospital = await Hospital.findByIdAndUpdate(req.params.id,req.body, {
+        const space = await Space.findByIdAndUpdate(req.params.id,req.body, {
             new: true,
             runValidators: true
         });
 
-        if(!hospital){
+        if(!space){
             return res.status(400).json({success:false});
         }
 
-        res.status(200).json({success:true, data:hospital});
+        res.status(200).json({success:true, data:space});
     } catch(err){
         res.status(400).json({success:false});
     }
     
 };
 
-//@desc     Delete hospital
-//@route    DELETE /api/v1/hospitals /:id
+//@desc     Delete space
+//@route    DELETE /api/v1/spaces /:id
 //@access   Private
-exports.deleteHospital = async (req,res,next)=>{
+exports.deleteSpace = async (req,res,next)=>{
     try{
-        const hospital = await Hospital.findById(req.params.id);
-        if(!hospital){
+        const space = await Space.findById(req.params.id);
+        if(!space){
             return res.status(400).json({success:false});
         }
-        hospital.remove();
+        space.remove();
         res.status(200).json({success:true, data:{}});
     } catch(err){
         res.status(400).json({success:false});
