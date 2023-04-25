@@ -33,6 +33,26 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default : Date.now
     }
+
+    // Please check again
+    ,
+    isBlocked:{ 
+        type: Boolean,
+        default: false
+      },
+    reports: [{
+        date: {
+          type: Date,
+          default: Date.now
+        },
+        reason: {
+          type: String,
+          required: true
+        },
+        notes: {
+          type: String
+        }
+      }]
 });
 
 //Encrypt password using bcrypt
