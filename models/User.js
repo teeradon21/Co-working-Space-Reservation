@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema({
     isBlocked:{ 
         type: Boolean,
         default: false
-      },
+    },
     reports: [{
         date: {
           type: Date,
@@ -71,5 +71,22 @@ UserSchema.methods.getSignedJwtToken = function(){
 UserSchema.methods.matchPassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword,this.password);
 }
+
+
+// Please check this
+// method to check if user is blocked
+userSchema.methods.isBlocked = function () {
+    return this.isBlocked;
+  };
+  
+  // method to increment the report count and check if user should be blocked
+userSchema.methods.incrementReportCount = async function (reason, notes) {
+    this.reports.push({ reason, notes });
+    if (this.reports.length >= 3) {
+      this.isBlocked = true;
+    } 
+    await this.save();
+    
+};
 
 module.exports=mongoose.model('User',UserSchema);
