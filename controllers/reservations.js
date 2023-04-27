@@ -7,14 +7,16 @@ const Space = require('../models/Space');
 //@access   Public
 exports.getReservations= async (req,res,next)=>{
     let query;
+    let spaceId = req.params.spaceId;
+
     //General users can see only their reservations!
     if(req.user.role !== 'admin'){
-        query = Reservation.find({user:req.user.id}).populate({
+        query = Reservation.find({user:req.user.id,space:spaceId}).populate({
             path: 'space',
             select : 'name province tel'
         });
     }else{ //If you are admin, you can see all!
-        query = Reservation.find().populate({
+        query = Reservation.find({space:spaceId}).populate({
             path: 'space',
             select : 'name province tel'
         });;
@@ -30,6 +32,7 @@ exports.getReservations= async (req,res,next)=>{
     }
     
 };
+
 
 //@desc     Get single reservation
 //@route    GET /api/v1/reservations/:id

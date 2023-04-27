@@ -1,7 +1,7 @@
 const Report = require('../models/Report');
 const Reservation = require('../models/Reservation');
 const Space = require('../models/Space');
-const USer = require('../models/User');
+const User = require('../models/User');
 
 
 //@desc     Get all reports
@@ -85,11 +85,16 @@ exports.getReport= async (req,res,next)=>{
 //@access   Private
 exports.createReport= async (req,res,next)=>{
     console.log(req.body)
+    console.log('line0')
     let user = await User.findById(req.body.user);
+    console.log('line1')
     if (user.role === 'admin'){
+        console.log('line2')
         return res.status(400).json({success:false, message:'Admin cannot be reported'})
     }
+    console.log('line3')
     const report = await Report.create(req.body);
+    console.log('line4')
     user = await User.findByIdAndUpdate(req.body.user, {
         $inc: { reports: 1 },
       })
