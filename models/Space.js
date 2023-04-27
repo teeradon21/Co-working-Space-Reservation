@@ -32,6 +32,14 @@ const SpaceSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a region']
     },
+    opentime: {
+        type: String,
+        required: [true, 'Please add an open time']
+    },
+    closetime: {
+        type: String,
+        required: [true, 'Please add an close time']
+    },
     capacity:{
         type: Number,
         required: [true, 'Please provide the capacity of rooms in the coworking space'],
