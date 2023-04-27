@@ -85,7 +85,14 @@ exports.getReport= async (req,res,next)=>{
 //@access   Private
 exports.createReport= async (req,res,next)=>{
     console.log(req.body)
-    const report = await Report.create(req.body); 
+    let user = await User.findById(req.body.user);
+    if (user.role === 'admin'){
+        return res.status(400).json({success:false, message:'Admin cannot be reported'})
+    }
+    const report = await Report.create(req.body);
+    user = await User.findByIdAndUpdate(req.body.user, {
+        $inc: { reports: 1 },
+      })
     res.status(201).json({success: true, data:report});
 };
 
