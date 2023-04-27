@@ -1,6 +1,6 @@
 const Reservation = require('../models/Reservation');
 const Space = require('../models/Space');
-
+const User = require('../models/User');
 
 //@desc     Get all reservations
 //@route    GET /api/v1/reservations
