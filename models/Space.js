@@ -34,7 +34,7 @@ const SpaceSchema = new mongoose.Schema({
     },
     capacity:{
         type: Number,
-        required: [true, 'Please add a maximum capacity'],
+        required: [true, 'Please provide the capacity of rooms in the coworking space'],
     }
 }, {
     toJSON: {virtuals:true},
@@ -58,12 +58,5 @@ SpaceSchema.virtual('reservations',{
     foreignField: 'space',
     justOne:false
 });
-
-//Please check this too
-//Search max Capacity
-SpaceSchema.statics.findByCapacity = function(maxCapacity) {
-    return this.find({ capacity: { $gte: maxCapacity } });
-  };
-  
 
 module.exports=mongoose.model('Space',SpaceSchema);

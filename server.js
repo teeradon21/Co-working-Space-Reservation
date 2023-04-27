@@ -13,6 +13,9 @@ connectDB();
 const spaces = require('./routes/spaces');
 const auth = require('./routes/auth');
 const reservations = require('./routes/reservations');
+const reports = require('./routes/reports');
+
+// const user = require('./routes/user');
 
 const app=express();
 
@@ -25,6 +28,9 @@ app.use(cookieParser());
 app.use('/api/v1/spaces',spaces);
 app.use('/api/v1/auth',auth);
 app.use('/api/v1/reservations',reservations);
+app.use('/api/v1/reports',reports);
+
+// app.use('/api/v1/user',user);
 
 // app.get('/',(req,res) => {
 //     res.status(200).json({success:"true", data:{id:1}});

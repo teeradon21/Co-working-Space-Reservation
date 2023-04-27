@@ -14,11 +14,12 @@ exports.getReservations= async (req,res,next)=>{
             select : 'name province tel'
         });
     }else{ //If you are admin, you can see all!
-        query = Reservation.find().find({user:req.user.id}).populate({
+        query = Reservation.find().populate({
             path: 'space',
             select : 'name province tel'
         });;
     }
+
     try{
         const reservations = await query;
 

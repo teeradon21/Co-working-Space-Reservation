@@ -32,27 +32,12 @@ const UserSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default : Date.now
-    }
-
-    // Please check again
-    ,
-    isBlocked:{ 
-        type: Boolean,
-        default: false
     },
-    reports: [{
-        date: {
-          type: Date,
-          default: Date.now
-        },
-        reason: {
-          type: String,
-          required: true
-        },
-        notes: {
-          type: String
-        }
-      }]
+    reports: {
+        type: Number,
+        default: 0,
+        max: 3
+    }
 });
 
 //Encrypt password using bcrypt
@@ -75,18 +60,18 @@ UserSchema.methods.matchPassword = async function(enteredPassword){
 
 // Please check this
 // method to check if user is blocked
-userSchema.methods.isBlocked = function () {
-    return this.isBlocked;
-  };
+// UserSchema.methods.isBlocked = async function () {
+//     return this.isBlocked;
+//   };
   
-  // method to increment the report count and check if user should be blocked
-userSchema.methods.incrementReportCount = async function (reason, notes) {
-    this.reports.push({ reason, notes });
-    if (this.reports.length >= 3) {
-      this.isBlocked = true;
-    } 
-    await this.save();
+//   method to increment the report count and check if user should be blocked
+// UserSchema.methods.incrementReportCount = async function (reason, notes) {
+//     this.reports.push({ reason, notes });
+//     if (this.reports.length >= 3) {
+//       this.isBlocked = true;
+//     } 
+//     await this.save();
     
-};
+// };
 
 module.exports=mongoose.model('User',UserSchema);
