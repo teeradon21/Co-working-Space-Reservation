@@ -69,11 +69,16 @@ exports.addReservation= async (req,res,next)=>{
         req.body.user = req.user.id;
 
         //Check for existed reservation
-        const existedReservations = await Reservation.find({user:req.user.id});
+        const existedReservations = await Reservation.find({user:req.user.id, reserveDate:{$gte: Date.now}});
 
         //If the user is not an admin, they can only create 3 reservation
         if(existedReservations.length>=3 && req.user.role !== 'admin'){
             return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 reservations`});
+        }
+
+        //If user is reported 3 times, they cannot create reservation
+        if(req.user.reports>=3){
+            return res.status(400).json({success:false, message:`The user with ID ${req.user.id} is blocked for reservation`});
         }
 
         const reservation = await Reservation.create(req.body); 

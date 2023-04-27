@@ -39,8 +39,7 @@ const UserSchema = new mongoose.Schema({
     },
     reports: {
         type: Number,
-        default: 0,
-        max: 3
+        default: 0
     }
 });
 
