@@ -102,7 +102,7 @@ exports.addReservation= async (req,res,next)=>{
         //Check for space reservation on that day
         const spaceReservations = await Reservation.find({space:req.body.space, reserveDate: req.body.reserveDate});
         if(spaceReservations.length>=space.capacity){
-            return res.status(400).json({success:false, message:`The space with ID ${space.id} is full on ${reserveDate}`});
+            return res.status(400).json({success:false, message:`The space with ID ${space.id} is full on ${req.body.reserveDate}`});
         }
 
         const reservation = await Reservation.create(req.body); 
