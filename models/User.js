@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema({
             'Please add a valid email'
         ]
     },
+    phone: {
+        type: String,
+        required: [true, 'Please add a phone number']
+    },
     role: {
         type: String,
         enum: ['user','admin'],
@@ -57,21 +61,5 @@ UserSchema.methods.matchPassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword,this.password);
 }
 
-
-// Please check this
-// method to check if user is blocked
-// UserSchema.methods.isBlocked = async function () {
-//     return this.isBlocked;
-//   };
-  
-//   method to increment the report count and check if user should be blocked
-// UserSchema.methods.incrementReportCount = async function (reason, notes) {
-//     this.reports.push({ reason, notes });
-//     if (this.reports.length >= 3) {
-//       this.isBlocked = true;
-//     } 
-//     await this.save();
-    
-// };
 
 module.exports=mongoose.model('User',UserSchema);
