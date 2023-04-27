@@ -68,6 +68,14 @@ exports.addReservation= async (req,res,next)=>{
         //add user Id to req.body
         req.body.user = req.user.id;
 
+
+        const user = await User.findById(req.body.user);
+
+        //If user is reported 3 times, they cannot create reservation
+        if(user.reports>=3){
+            return res.status(400).json({success:false, message:`The user with ID ${req.user.id} is blocked for reservation`});
+        }
+
         //Check for existed reservation
         const existedReservations = await Reservation.find({user:req.user.id, reserveDate:{$gte: Date.now()}});
 
@@ -76,9 +84,10 @@ exports.addReservation= async (req,res,next)=>{
             return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 reservations`});
         }
 
-        //If user is reported 3 times, they cannot create reservation
-        if(req.user.reports>=3){
-            return res.status(400).json({success:false, message:`The user with ID ${req.user.id} is blocked for reservation`});
+        //Check for space reservation on that day
+        const spaceReservations = await Reservation.find({space:req.body.space, reserveDate: req.body.reserveDate});
+        if(spaceReservations.length>=space.capacity){
+            return res.status(400).json({success:false, message:`The space with ID ${space.id} is full on ${reserveDate}`});
         }
 
         const reservation = await Reservation.create(req.body); 
