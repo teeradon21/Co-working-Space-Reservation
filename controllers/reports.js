@@ -137,3 +137,20 @@ exports.deleteReport = async (req,res,next)=>{
         res.status(400).json({success:false});
     }
 };
+
+// //@desc     Unblock User
+// //@route    PUT /api/v1/reports/unblock/:userid
+// //@access   Private
+exports.unblockUser= async (req,res,next)=>{
+    try{
+        const user = await User.findByIdAndUpdate(req.params.userId, {
+            $set: {reports: 0},
+            new: true,
+            runValidators: true});
+        console.log(user)
+        res.status(200).json({success:true, data:user});
+    } catch(err){
+        res.status(400).json({success:false});
+    }
+    
+};
