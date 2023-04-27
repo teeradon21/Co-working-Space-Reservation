@@ -69,7 +69,7 @@ exports.addReservation= async (req,res,next)=>{
         req.body.user = req.user.id;
 
         //Check for existed reservation
-        const existedReservations = await Reservation.find({user:req.user.id, reserveDate:{$gte: Date.now}});
+        const existedReservations = await Reservation.find({user:req.user.id, reserveDate:{$gte: Date.now()}});
 
         //If the user is not an admin, they can only create 3 reservation
         if(existedReservations.length>=3 && req.user.role !== 'admin'){
@@ -85,6 +85,7 @@ exports.addReservation= async (req,res,next)=>{
 
         res.status(200).json({success: true, data:reservation});
     } catch (error) {
+        console.log(error)
         res.status(500).json({success:false, message:"Cannot create Reservation"});
     }
     
@@ -117,7 +118,7 @@ exports.updateReservation= async (req,res,next)=>{
 
         res.status(200).json({success:true, data:reservation});
     } catch(error){
-        res.status(500).json({success:false, message:"Cannot update Reservation"});
+        res.status(500).json({success:false, message: "Cannot update Reservation"});
     }
     
 };
