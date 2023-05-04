@@ -83,7 +83,7 @@ exports.addReservation= async (req,res,next)=>{
         //add user Id to req.body
         req.body.user = req.user.id;
 
-
+        //get user info
         const user = await User.findById(req.body.user);
 
         //If user is reported 3 times, they cannot create reservation
@@ -94,9 +94,9 @@ exports.addReservation= async (req,res,next)=>{
         //Check for existed reservation
         const existedReservations = await Reservation.find({user:req.user.id, reserveDate:{$gte: Date.now()}});
 
-        //If the user is not an admin, they can only create 3 reservation
+        //If the user is not an admin, they can only create 3 reservation in advance
         if(existedReservations.length>=3 && req.user.role !== 'admin'){
-            return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 reservations`});
+            return res.status(400).json({success:false, message:`The user with ID ${req.user.id} has already made 3 reservations in advance`});
         }
 
         //Check for space reservation on that day
